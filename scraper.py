@@ -1,6 +1,26 @@
+import configparser
+import os
 import re
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
+from urllib.robotparser import RobotFileParser
+
+from bs4 import BeautifulSoup
+
+_ROBOTS_CACHE = {}
+
+
+def _load_user_agent():
+    config_path = os.path.join(os.path.dirname(__file__), "config.ini")
+    parser = configparser.ConfigParser()
+    try:
+        parser.read(config_path)
+        return parser["IDENTIFICATION"]["USERAGENT"].strip()
+    except Exception:
+        return "*"
+
+
+_USER_AGENT = _load_user_agent()
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -32,8 +52,53 @@ def crawl_document(url, resp):
 
 def permits_crawl(url, resp):
     """Decide whether the retrieved URL should be processed."""
-    # TODO: implement policy checks (status, content-type, robots, etc.).
-    return True
+    user_agent = _get_user_agent()
+    rp = _get_robot_parser(url)
+    if rp is None:
+        return True
+
+    if rp.disallow_all:
+        return False
+    elif rp.allow_all:
+        return True
+    elif _has_agent_rule(rp, user_agent):
+        return rp.can_fetch(user_agent, url)
+    elif _has_agent_rule(rp, "*"):
+        return rp.can_fetch("*", url)
+    else:
+        return True
+
+
+def _get_user_agent():
+    return _USER_AGENT
+
+
+def _get_robot_parser(url):
+    parsed = urlparse(url)
+    if not parsed.scheme or not parsed.netloc:
+        return None
+    key = f"{parsed.scheme}://{parsed.netloc}"
+    if key in _ROBOTS_CACHE:
+        return _ROBOTS_CACHE[key]
+
+    robots_url = f"{key}/robots.txt"
+    rp = RobotFileParser()
+    rp.set_url(robots_url)
+    try:
+        rp.read()
+    except Exception:
+        rp.allow_all = True
+    _ROBOTS_CACHE[key] = rp
+    return rp
+
+
+def _has_agent_rule(rp, agent):
+    agent_lower = agent.lower()
+    for entry in getattr(rp, "entries", []):
+        for ua in entry.useragents:
+            if ua.lower() == agent_lower:
+                return True
+    return False
 
 
 def retrieve_text(url, resp):
@@ -59,25 +124,14 @@ def parse_text_for_links(base_url, text):
         except Exception:
             return []
 
-    class _LinkParser(HTMLParser):
-        def __init__(self):
-            super().__init__()
-            self.links = []
-        def handle_starttag(self, tag, attrs):
-            if tag.lower() != "a":
-                return
-            for name, value in attrs:
-                if name.lower() == "href" and value:
-                    self.links.append(value)
-
-    parser = _LinkParser()
     try:
-        parser.feed(text)
+        soup = BeautifulSoup(text, "lxml")
     except Exception:
-        return []
+        soup = BeautifulSoup(text, "html.parser")
+    hrefs = [a.get("href") for a in soup.find_all("a") if a.get("href")]
 
     absolute_links = []
-    for href in parser.links:
+    for href in hrefs:
         cleaned = href.strip()
         if not cleaned:
             continue
