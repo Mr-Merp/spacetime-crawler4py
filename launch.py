@@ -4,6 +4,15 @@ from argparse import ArgumentParser
 from utils.server_registration import get_cache_server
 from utils.config import Config
 from crawler import Crawler
+import multiprocessing
+import sys
+
+
+if sys.platform == "darwin":
+    try:
+        multiprocessing.set_start_method("fork", force=True)
+    except RuntimeError:
+        pass
 
 
 def main(config_file, restart):
