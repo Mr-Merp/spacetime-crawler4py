@@ -22,9 +22,11 @@ def _load_user_agent():
 
 _USER_AGENT = _load_user_agent()
 
+
 def scraper(url, resp):
     links = extract_next_links(url, resp)
     return [link for link in links if is_valid(link)]
+
 
 def extract_next_links(url, resp):
     # Main scraper frame: check policy, extract text, store, parse links.
@@ -105,7 +107,17 @@ def retrieve_text(url, resp):
     """Extract HTML text from the response."""
     # TODO: extract text safely from resp.raw_response.content.
     # Placeholder returns None to avoid processing until implemented.
-    return None
+    #make sure response is ok first
+    if not resp or resp.status != 200:
+        return None
+    #make sure raw response exist
+    if not resp.raw_response:
+        return None
+
+    page_text = resp.raw_response.text
+    if not page_text or len(page_text.strip()) == 0:
+        return None
+    return page_text
 
 
 def store_document(url, text):
@@ -143,13 +155,18 @@ def parse_text_for_links(base_url, text):
         absolute_links.append(urljoin(base_url, cleaned))
     return absolute_links
 
+
 def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
     # There are already some conditions that return False.
+    allowed_domains = r".*\.(ics|cs|informatics|stat)\.uci\.edu$"
     try:
         parsed = urlparse(url)
+        # make sure its http or https links
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if not re.match(allowed_domains, parsed.netloc.lower()):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
@@ -162,5 +179,5 @@ def is_valid(url):
             + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower())
 
     except TypeError:
-        print ("TypeError for ", parsed)
+        print("TypeError for ", parsed)
         raise
