@@ -78,7 +78,8 @@ class Worker(Thread):
                 for scraped_url in scraped_urls:
                     self.frontier.add_url(scraped_url)
 
-                self.logger.info(f"Stored unique page: {tbd_url}")
+                self.logger.info(f"Stored unique page: {tbd_url}, status <{resp.status}>, "
+                                 f"using cache {self.config.cache_server}.")
             else:
                 # Skip duplicate content or empty responses
                 reason = detection_method if is_dup else "No content"
