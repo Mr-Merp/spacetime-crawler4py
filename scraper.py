@@ -412,10 +412,20 @@ def is_trap(url: str) -> bool:
                 if re.search(r"\d{4}-\d{2}-\d{2}", value):
                     return True
 
-    # DokuWiki media/download endpoints and media-heavy query patterns
+    # DokuWiki navigation/revision traps and media endpoints
     if "/doku.php" in path_lower:
+        doku_query_keys = {k.lower() for k in query.keys()}
+        doku_trap_keys = {
+            "do", "idx", "rev", "rev2", "difftype", "sectok",
+            "tab_files", "tab_details",
+        }
+        if doku_query_keys & doku_trap_keys:
+            return True
         do_values = [v.lower() for v in query.get("do", [])]
-        if "media" in do_values:
+        doku_trap_do_values = {
+            "edit", "index", "recent", "backlink", "diff", "revisions", "media"
+        }
+        if any(v in doku_trap_do_values for v in do_values):
             return True
     if re.search(r"/lib/exe/(fetch|detail)\.php", path_lower):
         return True
