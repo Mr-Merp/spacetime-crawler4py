@@ -325,6 +325,7 @@ def is_valid(url):
         raise
 
 
+
 def is_trap(url: str) -> bool:
     parsed = urlparse(url)
 
@@ -338,6 +339,7 @@ def is_trap(url: str) -> bool:
     current_year = _dt.datetime.utcnow().year
     date_patterns = [
         r"/(19|20)\d{2}/\d{1,2}/\d{1,2}/",  # /YYYY/MM/DD/
+        r"/(19|20)\d{2}-\d{1,2}-\d{1,2}/",  # /YYYY-MM-DD/
         r"[?&](date|day|month|year)=\d{4}[-/]\d{1,2}[-/]\d{1,2}",  # ?date=YYYY-MM-DD
     ]
     for pattern in date_patterns:
@@ -354,17 +356,39 @@ def is_trap(url: str) -> bool:
         if len(values) > 1:
             return True
     for key in query.keys():
-        if key.lower() in {"page", "p", "start", "offset"}:
+        key_lower = key.lower()
+        if key_lower in {"page", "p", "start", "offset", "paged"}:
             if len(query[key]) > 1:
                 return True
+        if key_lower in {"ical", "outlook-ical", "icalendar", "format"}:
+            return True
 
     # Session or tracking IDs
     tracking_keys = {
         "sessionid", "sid", "phpsessid", "jsessionid", "ref",
         "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+        "gclid", "fbclid",
     }
     for key in query.keys():
         if key.lower() in tracking_keys:
             return True
+
+    # Calendar archive traps (daily pages)
+    if re.search(r"/events/.*/day/\d{4}-\d{2}-\d{2}", parsed.path.lower()):
+        return True
+    if re.search(r"/calendar/|/events/[^/]+/day/\d{4}-\d{2}-\d{2}", parsed.path.lower()):
+        return True
+
+    # Trap-like query parameter names common in calendars/feeds
+    for key in query.keys():
+        if re.search(r"(calendar|ical|feed|rss|atom)", key.lower()):
+            return True
+
+    # Excessively large numeric pagination values
+    for key, values in query.items():
+        if key.lower() in {"page", "p", "start", "offset"}:
+            for value in values:
+                if value.isdigit() and int(value) > 1000:
+                    return True
 
     return False
