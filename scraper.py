@@ -412,6 +412,22 @@ def is_trap(url: str) -> bool:
                 if re.search(r"\d{4}-\d{2}-\d{2}", value):
                     return True
 
+    # DokuWiki media/download endpoints and media-heavy query patterns
+    if "/doku.php" in path_lower:
+        do_values = [v.lower() for v in query.get("do", [])]
+        if "media" in do_values:
+            return True
+    if re.search(r"/lib/exe/(fetch|detail)\.php", path_lower):
+        return True
+    media_query_keys = {"image", "media", "tab_files", "tab_details", "sectok"}
+    if any(k.lower() in media_query_keys for k in query.keys()):
+        return True
+    image_exts = (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".bmp", ".ico", ".tiff")
+    for values in query.values():
+        for value in values:
+            if value.lower().endswith(image_exts):
+                return True
+
     # Excessively large numeric pagination values
     for key, values in query.items():
         if key.lower() in {"page", "p", "start", "offset"}:
