@@ -5,6 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cf79374-75b0-4941-b76b-12b3604deb20" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/spacetime-crawler4py.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=code.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=courselisting.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=create.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=dgillen.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=hpi.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=mds.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=mhcid.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/raw/source=www.cs.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crawler/frontier.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/frontier.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crawler/worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/worker.py" afterDir="false" />
@@ -63,7 +78,7 @@
       <updated>1769988433919</updated>
       <workItem from="1769988435768" duration="5302000" />
       <workItem from="1770412195084" duration="545000" />
-      <workItem from="1770412910407" duration="3471000" />
+      <workItem from="1770412910407" duration="3872000" />
     </task>
     <servers />
   </component>
