@@ -328,6 +328,7 @@ def is_valid(url):
 
 def is_trap(url: str) -> bool:
     parsed = urlparse(url)
+    path_lower = (parsed.path or "").lower()
 
     # Overly long or deeply nested URLs
     if len(url) > 2000:
@@ -374,15 +375,42 @@ def is_trap(url: str) -> bool:
             return True
 
     # Calendar archive traps (daily pages)
-    if re.search(r"/events/.*/day/\d{4}-\d{2}-\d{2}", parsed.path.lower()):
+    if re.search(r"/events/\d{4}-\d{2}-\d{2}$", path_lower):
         return True
-    if re.search(r"/calendar/|/events/[^/]+/day/\d{4}-\d{2}-\d{2}", parsed.path.lower()):
+    if re.search(r"/events/.*/day/\d{4}-\d{2}-\d{2}", path_lower):
+        return True
+    if re.search(r"/calendar/|/events/[^/]+/day/\d{4}-\d{2}-\d{2}", path_lower):
+        return True
+    if re.search(r"/events/today/?$", path_lower):
+        return True
+
+    # Calendar archive traps (month/list/tag views)
+    if re.search(r"/events/month(/|$)", path_lower):
+        return True
+    if re.search(r"/events/month/\d{4}-\d{2}", path_lower):
+        return True
+    if re.search(r"/events/list(/|$)", path_lower):
+        return True
+    if re.search(r"/events/list/page/\d+(/|$)", path_lower):
+        return True
+    if re.search(r"/events/tag/[^/]+/\d{4}-\d{2}$", path_lower):
+        return True
+    if re.search(r"/events/tag/[^/]+/list(/|$)", path_lower):
+        return True
+    if re.search(r"/events/tag/[^/]+/list/page/\d+(/|$)", path_lower):
         return True
 
     # Trap-like query parameter names common in calendars/feeds
     for key in query.keys():
-        if re.search(r"(calendar|ical|feed|rss|atom)", key.lower()):
+        key_lower = key.lower()
+        if re.search(r"(calendar|ical|feed|rss|atom)", key_lower):
             return True
+        if key_lower in {"tribe-bar-date", "eventdisplay", "tribe_event", "eventdate"}:
+            return True
+        if "date" in key_lower or "event" in key_lower or "tribe" in key_lower:
+            for value in query.get(key, []):
+                if re.search(r"\d{4}-\d{2}-\d{2}", value):
+                    return True
 
     # Excessively large numeric pagination values
     for key, values in query.items():
