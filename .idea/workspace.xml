@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6cf79374-75b0-4941-b76b-12b3604deb20" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crawler/frontier.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/frontier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crawler/worker.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/worker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/raw/source=cml.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" beforeDir="false" afterPath="$PROJECT_DIR$/data/raw/source=cml.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/raw/source=www.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" beforeDir="false" afterPath="$PROJECT_DIR$/data/raw/source=www.ics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/raw/source=www.informatics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" beforeDir="false" afterPath="$PROJECT_DIR$/data/raw/source=www.informatics.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/raw/source=www.stat.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" beforeDir="false" afterPath="$PROJECT_DIR$/data/raw/source=www.stat.uci.edu/dt=2026-02-06/part-00000.jsonl.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontier.shelve.db" beforeDir="false" afterPath="$PROJECT_DIR$/frontier.shelve.db" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="395aYc0nHDqKL8PNthv1n5x69jx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.scraper.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18034.82" />
+        <option value="bundled-python-sdk-975db3bf15a3-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18034.82" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6cf79374-75b0-4941-b76b-12b3604deb20" name="Changes" comment="" />
+      <created>1769988433919</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1769988433919</updated>
+      <workItem from="1769988435768" duration="5302000" />
+      <workItem from="1770412195084" duration="545000" />
+      <workItem from="1770412910407" duration="3471000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/spacetime_crawler4py$scraper.coverage" NAME="scraper Coverage Results" MODIFIED="1769990274028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
