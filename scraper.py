@@ -7,13 +7,14 @@ import os
 import re
 from html.parser import HTMLParser
 from types import SimpleNamespace
-from urllib.parse import parse_qs, urljoin, urlparse
+from urllib.parse import parse_qs, urljoin, urldefrag, urlparse
 from urllib.robotparser import RobotFileParser
 
 from bs4 import BeautifulSoup
 from utils.config import Config
 from utils.download import download
 from utils.server_registration import get_cache_server
+from analytics import track_page
 
 _ROBOTS_CACHE = {}
 _CACHE_SERVER = None
@@ -57,6 +58,8 @@ def crawl_document(url, resp):
     text = retrieve_text(url, resp)
     if text is None:
         return []
+    # Track page for analytics (saved at end of crawl)
+    track_page(url, text)
     store_document(url, text, resp=resp)
     return parse_text_for_links(url, text)
 
@@ -286,7 +289,10 @@ def parse_text_for_links(base_url, text):
             continue
         if cleaned.startswith("#"):
             continue
-        absolute_links.append(urljoin(base_url, cleaned))
+        # Convert to absolute URL and defragment (remove #fragment)
+        absolute_url = urljoin(base_url, cleaned)
+        defragged_url, _ = urldefrag(absolute_url)
+        absolute_links.append(defragged_url)
     return absolute_links
 
 
