@@ -106,7 +106,7 @@ class CrawlerAnalytics:
         """Save analytics data to disk."""
         with self.lock:
             data = {
-                "unique_page_count": self.unique_pages,
+                "unique_pages": self.unique_pages,
                 "longest_page": self.longest_page,
                 "top_50_words": self.word_counter.most_common(50),
                 "subdomain_counts": dict(self.subdomain_counter)

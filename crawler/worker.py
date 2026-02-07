@@ -40,7 +40,7 @@ class Worker(Thread):
 
         # Initialize the SimilarityTracker for near-duplicate detection
         # Note: In this version, each worker has its own tracker.
-        self.similarity_tracker = SimilarityTracker(exact_threshold=1.0, near_threshold=0.88)
+        self.similarity_tracker = SimilarityTracker(exact_threshold=1.0, near_threshold=0.95)
 
         # Safety checks to ensure 'requests' or 'urllib' aren't used in scraper.py
         assert {getsource(scraper).find(req) for req in {"from requests import", "import requests"}} == {
