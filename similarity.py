@@ -47,7 +47,7 @@ class SimilarityTracker:
             return {}
         
         # Extract alphanumeric sequences
-        words = re.findall(r'\b[a-z0-9]\b', text.lower())
+        words = re.findall(r'\b[a-z0-9]+\b', text.lower())
         
         word_freqs = {}
         for word in words:

@@ -16,6 +16,11 @@ from utils.download import download
 from utils.server_registration import get_cache_server
 from analytics import track_page
 
+from bs4 import XMLParsedAsHTMLWarning
+import warnings
+
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
+
 _ROBOTS_CACHE = {}
 _CACHE_SERVER = None
 
@@ -290,9 +295,12 @@ def parse_text_for_links(base_url, text):
         if cleaned.startswith("#"):
             continue
         # Convert to absolute URL and defragment (remove #fragment)
-        absolute_url = urljoin(base_url, cleaned)
-        defragged_url, _ = urldefrag(absolute_url)
-        absolute_links.append(defragged_url)
+        try:
+            absolute_url = urljoin(base_url, cleaned)
+            defragged_url, _ = urldefrag(absolute_url)
+            absolute_links.append(defragged_url)
+        except:
+            pass
     return absolute_links
 
 

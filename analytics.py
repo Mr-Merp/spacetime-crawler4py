@@ -15,7 +15,7 @@ class CrawlerAnalytics:
         self.save_file = save_file
         self.lock = Lock()
 
-        self.unique_pages = set()
+        self.unique_pages = 0
         self.word_counter = Counter()
         self.longest_page = {"url": "", "word_count": 0}
         self.subdomain_counter = Counter()
@@ -31,7 +31,7 @@ class CrawlerAnalytics:
             html_text: The HTML content of the page
         """
         with self.lock:
-            self.unique_pages.add(url)
+            self.unique_pages += 1
 
             subdomain = self._extract_subdomain(url)
             if subdomain:
@@ -106,8 +106,7 @@ class CrawlerAnalytics:
         """Save analytics data to disk."""
         with self.lock:
             data = {
-                "unique_pages": list(self.unique_pages),
-                "unique_page_count": len(self.unique_pages),
+                "unique_page_count": self.unique_pages,
                 "longest_page": self.longest_page,
                 "top_50_words": self.word_counter.most_common(50),
                 "subdomain_counts": dict(self.subdomain_counter)
@@ -125,7 +124,7 @@ class CrawlerAnalytics:
             with open(self.save_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
 
-            self.unique_pages = set(data.get("unique_pages", []))
+            self.unique_pages = data.get("unique_pages", 0)
             self.longest_page = data.get("longest_page", {"url": "", "word_count": 0})
 
             # Restore word counter
@@ -148,7 +147,7 @@ class CrawlerAnalytics:
             lines.append("")
 
             # 1. Unique pages
-            lines.append(f"1. Unique Pages Found: {len(self.unique_pages)}")
+            lines.append(f"1. Unique Pages Found: {self.unique_pages}")
             lines.append("")
 
             # 2. Longest page
@@ -211,6 +210,22 @@ def save_analytics():
     """Convenience function to save analytics data."""
     analytics = get_analytics()
     analytics.save()
+
+
+# save analytics every N pages
+_fetch_count = 0
+_fetch_lock = Lock()
+_FETCH_THRESHOLD = 50
+
+
+def notify_fetch(increment: int = 1):
+    """Notify the analytics subsystem that N pages have been fetched.
+    """
+    global _fetch_count
+    with _fetch_lock:
+        _fetch_count += increment
+        if _fetch_count % _FETCH_THRESHOLD == 0:
+            save_analytics()
 
 
 def generate_report():

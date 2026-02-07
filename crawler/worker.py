@@ -8,6 +8,7 @@ from utils import get_logger
 import scraper
 from scraper import retrieve_text, store_document
 from similarity import SimilarityTracker
+import analytics
 
 # Global variables shared by all worker threads to ensure cross-thread politeness
 domain_times = {}
@@ -25,8 +26,7 @@ def get_polite(url, config):
         # config.time_delay is typically 0.5s from config.ini
         sleep_time = max(0, (last_visit + config.time_delay) - now)
 
-        if sleep_time > 0:
-            time.sleep(sleep_time)
+        time.sleep(sleep_time)
 
         # Update the timestamp AFTER the sleep so the next thread knows to wait
         domain_times[domain] = time.time()
@@ -63,7 +63,6 @@ class Worker(Thread):
 
             # 2. Download the page content from the cache server
             resp = download(tbd_url, self.config, self.logger)
-            self.logger.info(f"Downloaded {tbd_url}")
 
             # 3. Extract text and check for exact/near duplicates
             text = retrieve_text(tbd_url, resp)
@@ -80,6 +79,10 @@ class Worker(Thread):
 
                 self.logger.info(f"Stored unique page: {tbd_url}, status <{resp.status}>, "
                                  f"using cache {self.config.cache_server}.")
+                try:
+                    analytics.notify_fetch()
+                except Exception:
+                    pass
             else:
                 # Skip duplicate content or empty responses
                 reason = detection_method if is_dup else "No content"
