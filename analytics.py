@@ -23,7 +23,8 @@ class CrawlerAnalytics:
         self._load_data()
     
     def increment_page_count(self):
-        self.unique_pages += 1
+        with self.lock:
+            self.unique_pages += 1
 
     def process_page(self, url, html_text):
         """
