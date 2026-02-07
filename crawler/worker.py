@@ -40,7 +40,7 @@ class Worker(Thread):
 
         # Initialize the SimilarityTracker for near-duplicate detection
         # Note: In this version, each worker has its own tracker.
-        self.similarity_tracker = SimilarityTracker(exact_threshold=1.0, near_threshold=0.95)
+        self.similarity_tracker = SimilarityTracker(exact_threshold=1.0, near_threshold=0.99)
 
         # Safety checks to ensure 'requests' or 'urllib' aren't used in scraper.py
         assert {getsource(scraper).find(req) for req in {"from requests import", "import requests"}} == {
@@ -85,6 +85,8 @@ class Worker(Thread):
                     pass
             else:
                 # Skip duplicate content or empty responses
+                analytics_temp = analytics.get_analytics()
+                analytics_temp.increment_page_count()
                 reason = detection_method if is_dup else "No content"
                 self.logger.info(f"Skipping {tbd_url} - Reason: {reason}")
 
